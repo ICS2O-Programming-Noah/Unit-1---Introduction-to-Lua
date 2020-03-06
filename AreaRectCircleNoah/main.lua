@@ -1,7 +1,10 @@
 -----------------------------------------------------------------------------------------
 -- Noah Sabbagh
 -- main.lua
--- 
+-- Course: ICS20
+-- This program displays four different shapes, all with colors and border, and includes
+-- one shape with a gradient colour and one of the shapes having some text saying the
+-- the area of the shape.
 -----------------------------------------------------------------------------------------
 
 -- Your code here
