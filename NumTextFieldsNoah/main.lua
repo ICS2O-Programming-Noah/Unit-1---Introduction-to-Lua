@@ -11,7 +11,7 @@
 display.setStatusBar(display.HiddenStatusBar)
 
 -- sets the background colour
-display.setDefault("background", 239/255, 0/255, 0/255)
+display.setDefault("background", 95/255, 230/255, 226/255)
 
 -----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES
@@ -28,7 +28,6 @@ local userAnswer
 local correctAnswer
 local checkmark
 local redX
-local incorrectPicture = display.newImageRect("Images/redX.png", 198, 96)
 
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -48,7 +47,9 @@ end
 
 local function HideCorrect()
 	correctObject.isVisible = false
-	incorrectObject = false
+	incorrectObject.isVisible = false
+	checkmark.isVisible = false
+	redX.isVisible = false
 	AskQuestion()
 end
 
@@ -72,11 +73,15 @@ local function NumericFieldListener( event )
 			checkmark.isVisible = true
 			redX.isVisible = false
 			timer.performWithDelay(3000, HideCorrect)
-		else incorrectObject.isVisible = true
+		else 
+			incorrectObject.isVisible = true
 			correctObject.isVisible = false
 			checkmark.isVisible = false
 			redX.isVisible = true
+			timer.performWithDelay(3000, HideCorrect)
 		end
+		-- clear the text field
+		event.target.text = ""
 	end
 end
 
@@ -86,7 +91,7 @@ end
 
 -- displays a question and sets the color
 questionObject = display.newText( "", display.contentWidth/3, display.contentHeight/2, nil, 75)
-questionObject:setTextColor(107/255, 242/255, 107/255)
+questionObject:setTextColor(11/255, 16/255, 189/255)
 
 -- create the correct text object and make it invisible
 correctObject = display.newText( "Correct!", display.contentWidth*1/4, display.contentHeight*1/4, nil, 50 )
@@ -98,15 +103,21 @@ numericField = native.newTextField( display.contentWidth*2/3, display.contentHei
 numericField.inputType = "number"
 
 -- create the incorrect text object and make it invisible
-incorrectObject = display.newText( "Incorrect. Try another one.", display.contentWidth/3, display.contentHeight/2, nil, 50 )
+incorrectObject = display.newText( "Incorrect. Try another one.", display.contentWidth*1/3, display.contentHeight*1/3, nil, 50 )
 incorrectObject:setTextColor(2/255, 60/255, 219/255)
 incorrectObject.isVisible = false
 
 -- create the checkmark
 checkmark = display.newImageRect("Images/checkmark.png", 198, 96)
+checkmark.x = display.contentWidth*4/5
+checkmark.y = display.contentHeight*1/4
+checkmark.isVisible = false
 
 -- create the redX
 redX = display.newImageRect("Images/redX.png", 198, 96)
+redX.x = display.contentWidth*4/5
+redX.y = display.contentHeight*1/4
+redX.isVisible = false
 
 -- add the event listener for the numeric field
 numericField:addEventListener( "userInput", NumericFieldListener)
