@@ -25,10 +25,13 @@ local numericField
 local randomNumber1
 local randomNumber2
 local userAnswer
-local correctAnswer
+local correctAnswer = 0
 local checkmark
 local redX
 local points = 0 
+local incorrectText
+local incorrectPoints
+local incorrectAnswer
 
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -54,6 +57,22 @@ local function HideCorrect()
 	AskQuestion()
 end
 
+-- Function: PointsListener
+-- Input: event listener
+-- Output: none
+-- Description: This function accepts an event listener
+local function GivePoints()
+	if (userAnswer == correctAnswer) then
+		-- give a point if user gets the correct answer
+		points = points + 1
+
+		-- update it in the display object
+		pointsText.text = "Points = ".. points
+	end
+end 
+
+local function GiveIncorrectPoints()
+	if (userAnswer == inco)
 -- Function: NumericFieldListener
 -- Input: event listener
 -- Ouput: none
@@ -77,32 +96,24 @@ local function NumericFieldListener( event )
 			incorrectObject.isVisible = false
 			checkmark.isVisible = true
 			redX.isVisible = false
-			timer.performWithDelay(3000, HideCorrect)
+			incorrectText = false
+			GivePoints()
+			timer.performWithDelay(3000, HideCorrect)			
 		else 
+			incorrectObject.text = "Sorry! That's incorrect.\nThe correct answer is \n".. correctAnswer
 			incorrectObject.isVisible = true
 			correctObject.isVisible = false
 			checkmark.isVisible = false
 			redX.isVisible = true
 			timer.performWithDelay(3000, HideCorrect)
 		end
+
 		-- clear the text field
 		event.target.text = ""
 	end
 end
 
--- Function: PointsListener
--- Input: event listener
--- Output: none
--- Description: This function accepts an event listener
-local function GivePoints (event)
-	if (userAnswer == correctAnswer) then
-	-- give a point if user gets the correct answer
-	points = points + 1
 
-	-- update it in the display object
-	pointsText.text = "Points = ".. points
-	end
-end 
 
 -----------------------------------------------------------------------------------------
 -- OBJECT CREATION
@@ -122,7 +133,7 @@ numericField = native.newTextField( display.contentWidth*2/3, display.contentHei
 numericField.inputType = "number"
 
 -- create the incorrect text object and make it invisible
-incorrectObject = display.newText( "Incorrect. Try another one.", display.contentWidth*1/3, display.contentHeight*1/3, nil, 50 )
+incorrectObject = display.newText( "", display.contentWidth*4/5, display.contentHeight*1/2, nil, 40 )
 incorrectObject:setTextColor(2/255, 60/255, 219/255)
 incorrectObject.isVisible = false
 
@@ -143,6 +154,7 @@ numericField:addEventListener( "userInput", NumericFieldListener)
 
 -- display the amount of points as a text object
 pointsText = display.newText("Points = " .. points, display.contentWidth/3, display.contentHeight/3, nil, 50)
+incorrectPointsText = display.newText("Incorrect Answers = " .. incorrectPoints, display.contentWidth/3, display.contentHeight*1/4, nil, 50)
 
 -----------------------------------------------------------------------------------------
 -- FUNCTION CALLS
@@ -150,4 +162,3 @@ pointsText = display.newText("Points = " .. points, display.contentWidth/3, disp
 
 -- call the function to ask the question
 AskQuestion()
-GivePoints:addEventListener("event", PointsListener)
