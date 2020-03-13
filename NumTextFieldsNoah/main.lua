@@ -28,6 +28,7 @@ local userAnswer
 local correctAnswer
 local checkmark
 local redX
+local points = 0 
 
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -53,6 +54,10 @@ local function HideCorrect()
 	AskQuestion()
 end
 
+-- Function: NumericFieldListener
+-- Input: event listener
+-- Ouput: none
+-- Description: This function accepts an event listener 
 local function NumericFieldListener( event )
 
 	-- user begins editing the numericField
@@ -84,6 +89,20 @@ local function NumericFieldListener( event )
 		event.target.text = ""
 	end
 end
+
+-- Function: PointsListener
+-- Input: event listener
+-- Output: none
+-- Description: This function accepts an event listener
+local function GivePoints (event)
+	if (userAnswer == correctAnswer) then
+	-- give a point if user gets the correct answer
+	points = points + 1
+
+	-- update it in the display object
+	pointsText.text = "Points = ".. points
+	end
+end 
 
 -----------------------------------------------------------------------------------------
 -- OBJECT CREATION
@@ -122,9 +141,13 @@ redX.isVisible = false
 -- add the event listener for the numeric field
 numericField:addEventListener( "userInput", NumericFieldListener)
 
+-- display the amount of points as a text object
+pointsText = display.newText("Points = " .. points, display.contentWidth/3, display.contentHeight/3, nil, 50)
+
 -----------------------------------------------------------------------------------------
 -- FUNCTION CALLS
 -----------------------------------------------------------------------------------------
 
 -- call the function to ask the question
 AskQuestion()
+GivePoints:addEventListener("event", PointsListener)
