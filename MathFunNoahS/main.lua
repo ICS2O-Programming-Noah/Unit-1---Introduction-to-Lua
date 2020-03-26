@@ -25,7 +25,18 @@ local questionObject
 local numericField
 local incorrectObject
 local correctObject
+local correctSound = audio.loadSound("Sounds/correctSound.mp3")
+local correctSoundChannel
+local incorrectSound = audio.loadSound("Sounds/incorrectSound.mp3")
+local incorrectSoundChannel
+local backgroundMusic = audio.loadSound("Sounds/backgroundMusic.mp3")
+local backgroundMusicChannel
 
+-----------------------------------------------------------------------------------------
+-- ADDING SOUND
+-----------------------------------------------------------------------------------------
+
+backgroundMusicChannel = audio.play(backgroundMusic)
 
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -120,6 +131,7 @@ local function NumericFieldListener (event)
 			timer.performWithDelay(2000, HideCorrect)	
 			-- clear the text field
 			event.target.text = ""
+			correctSoundChannel = audio.play(correctSound)
 			AskQuestion()
 		
 		else 
@@ -130,6 +142,7 @@ local function NumericFieldListener (event)
 			timer.performWithDelay(2000, HideIncorrect)
 			-- clear the text field
 			event.target.text = ""
+			incorrectSoundChannel = audio.play(incorrectSound)
 			AskQuestion()
 		end
 	end

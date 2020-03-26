@@ -11,14 +11,34 @@
 -- hide the status bar
 display.setStatusBar(display.HiddenStatusBar)
 
--- global variables
+-----------------------------------------------------------------------------------------
+-- GLOBAL VARIABLES
+-----------------------------------------------------------------------------------------
+
 scrollSpeedBeetleship = 3
+
+-- make a new scroll speed for the rocketship
+scrollSpeedRocketship = -5
+
+------------------------------------------------------------------------------------------------
+--LOCAL VARIABLES
+------------------------------------------------------------------------------------------------
 
 -- background image with width and height
 local backgroundImage = display.newImageRect("Images/background.png", 2048, 1536)
 
 -- character image with width and height
 local beetleship = display.newImageRect("Images/beetleship.png", 200, 200)
+
+-- create the second character image with width and height
+local rocketship = display.newImageRect("Images/rocketship.png", 200, 200)
+
+local backgroundMusic = audio.loadSound("Sounds/backgroundMusic.mp3")
+local backgroundMusicChannel
+
+-----------------------------------------------------------------------------------------
+-- BEETLESHIP FUNCTION
+-----------------------------------------------------------------------------------------
 
 -- set the image to be transparent
 beetleship.alpha = 0
@@ -27,11 +47,11 @@ beetleship.alpha = 0
 beetleship.x = 0
 beetleship.y = display.contentHeight * 1/5
 
--- Function: MoveShip
+-- Function: MoveBeetleship
 -- Input: this function accepts an event listener
 -- Output: none
 -- Description: This function adds the scroll speed to the x-value of the ship
-local function MoveShip (event)
+local function MoveBeetleship (event)
 	-- add the scroll speed to the x-value of the ship
 	beetleship.x = beetleship.x + scrollSpeedBeetleship
 	-- change the transparency of the ship every time it fades in
@@ -39,13 +59,11 @@ local function MoveShip (event)
 end
 
 -- MoveShip will be called over and over again
-Runtime:addEventListener("enterFrame", MoveShip)
+Runtime:addEventListener("enterFrame", MoveBeetleship)
 
--- create the second character image with width and height
-local rocketship = display.newImageRect("Images/rocketship.png", 200, 200)
-
--- make a new scroll speed for the rocketship
-scrollSpeedRocketship = -5
+-----------------------------------------------------------------------------------------
+-- ROCKETSHIP FUNCTION
+-----------------------------------------------------------------------------------------
 
 -- set the image to be a full image from the start
 rocketship.alpha = 1
@@ -64,6 +82,18 @@ local function MoveShip (event)
 	-- change the transparency of the ship so it moves and then fades out
 	rocketship.alpha = rocketship.alpha - 0.0000000001
 end
+
+-----------------------------------------------------------------------------------------
+-- ADDING SOUND
+-----------------------------------------------------------------------------------------
+backgroundMusicChannel = audio.play(backgroundMusic)
+
+-----------------------------------------------------------------------------------------
+-- FUNCTION CALLS
+-----------------------------------------------------------------------------------------
+
+-- MoveShip will be called over and over again
+Runtime:addEventListener("enterFrame", MoveBeetleship)
 
 -- MoveShip will be called over and over again
 Runtime:addEventListener("enterFrame", MoveShip)
