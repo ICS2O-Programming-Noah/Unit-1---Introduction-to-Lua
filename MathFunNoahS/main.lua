@@ -23,6 +23,9 @@ local randomNumber2
 local correctAnswer
 local questionObject
 local numericField
+local incorrectObject
+local correctObject
+
 
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -49,13 +52,22 @@ local function AskQuestion()
 		questionObject.text = randomNumber1 .. " + " .. randomNumber2 .. " = "
 	
 	-- however, if the random operator is 2, do subtraction
-	elseif (randomOperator == 2) then
-		--calculate the correct answer
-		correctAnswer = randomNumber1 - randomNumber2
+    elseif (randomOperator == 2) then
+        
+        if (randomNumber2 > randomNumber1) then
+        
+        -- calculate answer with numbers flipped
+        correctAnswer = randomNumber2 - randomNumber1
 
-		-- create question text object
-		questionObject.text = randomNumber1 .. " - " .. randomNumber2 .. " = "
-		
+        -- create question in text object
+        questionObject.text = randomNumber2 .. " - " .. randomNumber1 .. " = "
+        else 
+	    -- calculate the correct answer
+	    correctAnswer = randomNumber1 - randomNumber2
+
+	    -- create question in text object
+        questionObject.text = randomNumber1 .. " - " .. randomNumber2 .. " = "
+       end
 		-- but, if the random operator is 3, do multiplication
 	elseif (randomOperator == 3) then
 		--calculate the correct answer
@@ -74,6 +86,54 @@ local function AskQuestion()
 	end
 end
  
+local function HideCorrect()
+	correctObject.isVisible = false
+	AskQuestion()
+end
+
+local function HideIncorrect()
+	incorrectObject.isVisible = false
+	AskQuestion()
+end
+
+-- Function: NumericFieldListener
+-- Input: event listener
+-- Ouput: none
+-- Description: This function accepts an event listener 
+local function NumericFieldListener (event)
+	-- User begins editing the numeric field
+	if ( event.phase == "began" ) then
+		
+		-- clear the text field
+		event.target.text = ""
+
+	elseif ( event.phase == "submitted" ) then
+
+		-- when the answer is submitted (enter key is pressed) set user input to user's answer
+		userAnswer = tonumber(event.target.text)
+
+		-- if the users answer and the correct answer are the same:
+		if (userAnswer == correctAnswer) then
+			correctObject.isVisible = true
+			incorrectObject.isVisible = false
+			HideCorrect()
+			timer.performWithDelay(2000, HideCorrect)	
+			-- clear the text field
+			event.target.text = ""
+			AskQuestion()
+		
+		else 
+			incorrectObject.text = "Sorry! That's incorrect.\nThe correct answer is \n".. correctAnswer
+			incorrectObject.isVisible = true
+			correctObject.isVisible = false
+			HideIncorrect()
+			timer.performWithDelay(2000, HideIncorrect)
+			-- clear the text field
+			event.target.text = ""
+			AskQuestion()
+		end
+	end
+end
 
 -----------------------------------------------------------------------------------------
 -- OBJECT CREATION
@@ -85,11 +145,24 @@ questionObject:setTextColor(11/255, 16/255, 189/255)
 
 -- create the numeric field
 numericField = native.newTextField( display.contentWidth*2/3, display.contentHeight*2/3, 200, 100)
-numericField.inputType = "number"
+numericField.inputType = "decimal"
+
+-- create the correct text object and make it invisible
+correctObject = display.newText( "Correct!", display.contentWidth*1/4, display.contentHeight*1/6, nil, 50 )
+correctObject:setTextColor(199/255, 41/255, 205/255)
+correctObject.isVisible = false
+
+-- create the incorrect text object and make it invisible
+incorrectObject = display.newText( "", display.contentWidth*4/5, display.contentHeight*1/2, nil, 40 )
+incorrectObject:setTextColor(2/255, 60/255, 219/255)
+incorrectObject.isVisible = false
 
 -----------------------------------------------------------------------------------------
 -- FUNCTION CALLS
 -----------------------------------------------------------------------------------------
 
--- call the function to askt the question
+-- call the function to ask the question
 AskQuestion()
+
+-- create the event listener for the numeric field
+numericField:addEventListener( "userInput", NumericFieldListener)

@@ -89,7 +89,9 @@ local function NumericFieldListener (event)
 			points = points + 1
 			-- update it in the display object
 			pointsText.text = "Points = " .. points 
-			timer.performWithDelay(3000, HideCorrect)			
+			timer.performWithDelay(3000, HideCorrect)
+			-- clear the text field
+			event.target.text = ""			
 		else 
 			incorrectObject.text = "Sorry! That's incorrect.\nThe correct answer is \n".. correctAnswer
 			incorrectObject.isVisible = true
@@ -101,10 +103,9 @@ local function NumericFieldListener (event)
 			incorrectPointsText.text = "Incorrect Points = " .. incorrectPoints
 			redX.isVisible = true
 			timer.performWithDelay(3000, HideIncorrect)
+			-- clear the text field
+			event.target.text = ""
 		end
-
-		-- clear the text field
-		event.target.text = ""
 	end
 
 	if (points == 5) then
