@@ -127,23 +127,18 @@ local function NumericFieldListener (event)
 		if (userAnswer == correctAnswer) then
 			correctObject.isVisible = true
 			incorrectObject.isVisible = false
-			HideCorrect()
 			timer.performWithDelay(2000, HideCorrect)	
 			-- clear the text field
 			event.target.text = ""
 			correctSoundChannel = audio.play(correctSound)
-			AskQuestion()
-		
 		else 
 			incorrectObject.text = "Sorry! That's incorrect.\nThe correct answer is \n".. correctAnswer
 			incorrectObject.isVisible = true
 			correctObject.isVisible = false
-			HideIncorrect()
 			timer.performWithDelay(2000, HideIncorrect)
 			-- clear the text field
 			event.target.text = ""
 			incorrectSoundChannel = audio.play(incorrectSound)
-			AskQuestion()
 		end
 	end
 end
