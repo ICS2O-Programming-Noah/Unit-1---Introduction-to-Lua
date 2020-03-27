@@ -171,12 +171,12 @@ local function UpdateTime()
 		--reset the number of seconds left
 		secondsLeft = totalSeconds
 		lives = lives - 1
-	end
-
-	if (lives == 2) then
+		
+		if (lives == 2) then
 			heart2.isVisible = false
-	elseif (lives == 1) then
+		elseif (lives == 1) then
 			heart1.isVisible = false
+		end
 	end
 end
 
