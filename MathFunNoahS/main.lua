@@ -31,6 +31,19 @@ local incorrectSound = audio.loadSound("Sounds/incorrectSound.mp3")
 local incorrectSoundChannel
 local backgroundMusic = audio.loadSound("Sounds/backgroundMusic.mp3")
 local backgroundMusicChannel
+local gameOver
+
+-- variables for the timer
+local totalSeconds = 10
+local secondsLeft = 10
+local clockText
+local countDownTimer
+
+-- variables for lives
+local lives = 3
+local heart1
+local heart2
+
 
 -----------------------------------------------------------------------------------------
 -- ADDING SOUND
@@ -143,7 +156,36 @@ local function NumericFieldListener (event)
 	end
 end
 
------------------------------------------------------------------------------------------
+local function UpdateTime()
+	-- decrement the number of seconds
+	secondsLeft = secondsLeft - 1
+
+	-- display the number of seconds left in the clock object
+	clockText.text = secondsLeft .. ""
+	
+	if (userAnswer == correctAnswer) then
+		secondsLeft = totalSeconds
+	end
+
+	if (secondsLeft == 0) then
+		--reset the number of seconds left
+		secondsLeft = totalSeconds
+		lives = lives - 1
+	end
+
+	if (lives == 2) then
+			heart2.isVisible = false
+	elseif (lives == 1) then
+			heart1.isVisible = false
+	end
+end
+
+--function that calls the timer
+local function StartTimer()
+	--create a countdown timer that loops infinitely
+	countDownTimer = timer.performWithDelay(1000, UpdateTime, 0)
+end
+--------------------------------------ScSc---------------------------------------------------
 -- OBJECT CREATION
 -----------------------------------------------------------------------------------------
 
@@ -156,7 +198,7 @@ numericField = native.newTextField( display.contentWidth*2/3, display.contentHei
 numericField.inputType = "decimal"
 
 -- create the correct text object and make it invisible
-correctObject = display.newText( "Correct!", display.contentWidth*1/4, display.contentHeight*1/6, nil, 50 )
+correctObject = display.newText( "Correct!", display.contentWidth*3/4, display.contentHeight*1/2, nil, 50 )
 correctObject:setTextColor(199/255, 41/255, 205/255)
 correctObject.isVisible = false
 
@@ -165,6 +207,24 @@ incorrectObject = display.newText( "", display.contentWidth*4/5, display.content
 incorrectObject:setTextColor(2/255, 60/255, 219/255)
 incorrectObject.isVisible = false
 
+-- create the game over image
+gameOver = display.newImageRect("Images/0lives.jpg", 1024, 1000)
+gameOver.x = 512
+gameOver.y = 334
+gameOver.alpha = false
+
+-- create the lives to display on the screen
+heart1 = display.newImageRect("Images/heart.png", 100, 100)
+heart1.x = display.contentWidth * 7/8
+heart1.y = display.contentHeight * 1/7
+
+heart2 = display.newImageRect("Images/heart.png", 100, 100)
+heart2.x = display.contentWidth * 6/8
+heart2.y = display.contentHeight * 1/7
+
+-- create the text object for the clock
+clockText = display.newText( secondsLeft .. "", display.contentWidth*1/6, display.contentHeight*1/7, nil, 150)
+clockText:setTextColor(11/255, 16/255, 189/255)
 -----------------------------------------------------------------------------------------
 -- FUNCTION CALLS
 -----------------------------------------------------------------------------------------
@@ -174,3 +234,9 @@ AskQuestion()
 
 -- create the event listener for the numeric field
 numericField:addEventListener( "userInput", NumericFieldListener)
+
+-- call the function to update the lives
+UpdateTime()
+
+-- call the function to start the timer
+StartTimer()
