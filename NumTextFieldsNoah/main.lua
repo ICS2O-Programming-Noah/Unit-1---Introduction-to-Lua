@@ -121,7 +121,13 @@ local function NumericFieldListener (event)
 	end
 end
 
-
+local function CancelTimer()
+	if (incorrectPoints == 3) then
+		timer.cancel(AskQuestion)
+		numericField.isVisible = false
+		questionObject.isVisible = false
+	end
+end
 
 
 -----------------------------------------------------------------------------------------
@@ -171,4 +177,7 @@ incorrectPointsText = display.newText("Incorrect Answers = " .. incorrectPoints,
 
 -- call the function to ask the question
 AskQuestion()
+
+-- call the function to cancel the timer
+CancelTimer()
 
