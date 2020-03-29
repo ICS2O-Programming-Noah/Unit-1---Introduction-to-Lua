@@ -91,8 +91,17 @@ local function NumericFieldListener (event)
 			pointsText.text = "Points = " .. points 
 			timer.performWithDelay(3000, HideCorrect)
 			-- clear the text field
-			event.target.text = ""			
-		else 
+			event.target.text = ""	
+			if (points == 5) then
+				local win = display.newImageRect("Images/Winner.jpg", 1024, 1000)
+				win.x = 350
+				win.y = 359		
+			else 
+				timer.performWithDelay(3000, HideCorrect)
+				-- clear the text field
+				event.taget.text = ""
+			end
+		else
 			incorrectObject.text = "Sorry! That's incorrect.\nThe correct answer is \n".. correctAnswer
 			incorrectObject.isVisible = true
 			correctObject.isVisible = false
@@ -102,22 +111,16 @@ local function NumericFieldListener (event)
 			-- update it in the display object
 			incorrectPointsText.text = "Incorrect Points = " .. incorrectPoints
 			redX.isVisible = true
-			timer.performWithDelay(3000, HideIncorrect)
-			-- clear the text field
-			event.target.text = ""
+			if (incorrectPoints == 3) then
+				local lose = display.newImageRect("Images/GameOver.jpg", 1024, 1000)
+				lose.x = 350
+				lose.y = 359
+			else
+				timer.performWithDelay(3000, HideIncorrect)
+				-- clear the text field
+				event.target.text = ""
+			end
 		end
-	end
-
-	if (points == 5) then
-		local win = display.newImageRect("Images/Winner.jpg", 1024, 1000)
-		win.x = 350
-		win.y = 359
-	end
-
-	if (incorrectPoints == 3) then
-		local lose = display.newImageRect("Images/GameOver.jpg", 1024, 1000)
-		lose.x = 350
-		lose.y = 359
 	end
 end
 
