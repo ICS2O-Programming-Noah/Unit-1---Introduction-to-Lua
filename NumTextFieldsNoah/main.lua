@@ -95,11 +95,12 @@ local function NumericFieldListener (event)
 			if (points == 5) then
 				local win = display.newImageRect("Images/Winner.jpg", 1024, 1000)
 				win.x = 350
-				win.y = 359		
+				win.y = 359	
+				CancelTimer()	
 			else 
 				timer.performWithDelay(3000, HideCorrect)
 				-- clear the text field
-				event.taget.text = ""
+				event.target.text = ""
 			end
 		else
 			incorrectObject.text = "Sorry! That's incorrect.\nThe correct answer is \n".. correctAnswer
@@ -119,6 +120,7 @@ local function NumericFieldListener (event)
 				timer.performWithDelay(3000, HideIncorrect)
 				-- clear the text field
 				event.target.text = ""
+				CancelTimer()
 			end
 		end
 	end
@@ -126,7 +128,7 @@ end
 
 local function CancelTimer()
 	if (incorrectPoints == 3) then
-		transition.cancel(AskQuestion) 
+		timer.cancel(countDownTimer) 
 		numericField.isVisible = false
 		questionObject.isVisible = false
 	end
@@ -180,7 +182,3 @@ incorrectPointsText = display.newText("Incorrect Answers = " .. incorrectPoints,
 
 -- call the function to ask the question
 AskQuestion()
-
--- call the function to cancel the timer
-CancelTimer()
-
