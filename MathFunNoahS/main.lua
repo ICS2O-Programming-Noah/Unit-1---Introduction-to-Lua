@@ -104,7 +104,10 @@ local function AskQuestion()
 	elseif (randomOperator == 4) then
 		-- calculate the correct answer
 		correctAnswer = randomNumber1 / randomNumber2
-
+		correctAnswer = correctAnswer * 10
+		correctAnswer = math.round(correctAnswer)
+		correctAnswer = correctAnswer / 10
+		
 		-- create the question text object
 		questionObject.text = randomNumber1 .. " / " .. randomNumber2 .. " = "
 	end
@@ -118,6 +121,18 @@ end
 local function HideIncorrect()
 	incorrectObject.isVisible = false
 	AskQuestion()
+end
+
+local function LoseLives()
+	if (userAnswer ~= correctAnswer) then
+		lives = lives - 1
+		if (lives == 2) then
+			heart2.isVisible = false
+		if (lives == 1) then
+			heart1.isVisible = false
+			end
+		end
+	end
 end
 
 -- Function: NumericFieldListener
@@ -144,11 +159,13 @@ local function NumericFieldListener (event)
 			-- clear the text field
 			event.target.text = ""
 			correctSoundChannel = audio.play(correctSound)
+			secondsLeft = totalSeconds
 		else 
 			incorrectObject.text = "Sorry! That's incorrect.\nThe correct answer is \n".. correctAnswer
 			incorrectObject.isVisible = true
 			correctObject.isVisible = false
 			timer.performWithDelay(2000, HideIncorrect)
+			LoseLives()
 			-- clear the text field
 			event.target.text = ""
 			incorrectSoundChannel = audio.play(incorrectSound)
@@ -163,20 +180,9 @@ local function UpdateTime()
 	-- display the number of seconds left in the clock object
 	clockText.text = secondsLeft .. ""
 	
-	if (userAnswer == correctAnswer) then
-		secondsLeft = totalSeconds
-	end
-
 	if (secondsLeft == 0) then
-		--reset the number of seconds left
 		secondsLeft = totalSeconds
-		lives = lives - 1
-		
-		if (lives == 2) then
-			heart2.isVisible = false
-		elseif (lives == 1) then
-			heart1.isVisible = false
-		end
+		LoseLives()
 	end
 end
 
@@ -184,6 +190,14 @@ end
 local function StartTimer()
 	--create a countdown timer that loops infinitely
 	countDownTimer = timer.performWithDelay(1000, UpdateTime, 0)
+end
+
+local function CancelTimer()
+	if (lives == 0 ) then
+		timer.cancel(countDownTimer)
+		numericField.isVisible = false
+		questionObject.isVisible = false
+	end
 end
 --------------------------------------ScSc---------------------------------------------------
 -- OBJECT CREATION
@@ -235,8 +249,8 @@ AskQuestion()
 -- create the event listener for the numeric field
 numericField:addEventListener( "userInput", NumericFieldListener)
 
--- call the function to update the lives
-UpdateTime()
-
 -- call the function to start the timer
 StartTimer()
+
+-- call the function to stop the game
+CancelTimer()
