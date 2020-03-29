@@ -123,7 +123,7 @@ end
 
 local function CancelTimer()
 	if (incorrectPoints == 3) then
-		timer.cancel(AskQuestion)
+		transition.cancel(AskQuestion) 
 		numericField.isVisible = false
 		questionObject.isVisible = false
 	end
