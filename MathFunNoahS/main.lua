@@ -40,9 +40,11 @@ local clockText
 local countDownTimer
 
 -- variables for lives
-local lives = 3
+local lives = 5
 local heart1
 local heart2
+local heart3
+local heart4
 
 
 -----------------------------------------------------------------------------------------
@@ -126,11 +128,16 @@ end
 local function LoseLives()
 	if (userAnswer ~= correctAnswer) then
 		lives = lives - 1
-		if (lives == 2) then
+		if (lives == 4) then
+			heart4.isVisible = false
+		elseif (lives == 3) then
+			heart3.isVisible = false
+		elseif (lives == 2) then
 			heart2.isVisible = false
-		if (lives == 1) then
+		elseif (lives == 1) then
 			heart1.isVisible = false
-			end
+		elseif (lives == 0) then
+			timer.cancel(countDownTimer)
 		end
 	end
 end
@@ -189,18 +196,11 @@ end
 --function that calls the timer
 local function StartTimer()
 	--create a countdown timer that loops infinitely
-	countDownTimer = timer.performWithDelay(1000, UpdateTime, 0)
+	countDownTimer = timer.performWithDelay(1000, UpdateTime, NumericFieldListener, 0)
 end
 
-local function CancelTimer()
-	if (lives == 0 ) then
-		timer.cancel(countDownTimer)
-		numericField.isVisible = false
-		questionObject.isVisible = false
-	end
-end
 --------------------------------------ScSc---------------------------------------------------
--- OBJECT CREATION
+-- OBJECT CREATIO
 -----------------------------------------------------------------------------------------
 
 -- create the question text object
@@ -236,6 +236,14 @@ heart2 = display.newImageRect("Images/heart.png", 100, 100)
 heart2.x = display.contentWidth * 6/8
 heart2.y = display.contentHeight * 1/7
 
+heart3 = display.newImageRect("Images/heart.png", 100, 100)
+heart3.x = display.contentWidth * 5/8
+heart3.y = display.contentHeight * 1/7
+
+heart4 = display.newImageRect("Images/heart.png", 100, 100)
+heart4.x = display.contentWidth * 4/8
+heart4.y = display.contentHeight * 1/7
+
 -- create the text object for the clock
 clockText = display.newText( secondsLeft .. "", display.contentWidth*1/6, display.contentHeight*1/7, nil, 150)
 clockText:setTextColor(11/255, 16/255, 189/255)
@@ -251,6 +259,3 @@ numericField:addEventListener( "userInput", NumericFieldListener)
 
 -- call the function to start the timer
 StartTimer()
-
--- call the function to stop the game
-CancelTimer()
