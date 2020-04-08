@@ -49,13 +49,7 @@ pointsText.isVisible = true
 -----------------------------------------------------------------------------------------
 -- FUNCTIONS
 -----------------------------------------------------------------------------------------
-local function Hide()
-	-- change the visibility of the alien
-	alien.isVisible = false
-	PopUpDelay()
-end
-
-local function PopUp()
+function PopUp()
 
 	-- Choose a random position on the screen bewteen 0 and the size of the screen
 	alien.x = math.random( 0, display.contentWidth)
@@ -65,15 +59,21 @@ local function PopUp()
 	timer.performWithDelay(500, Hide)
 end
 
-local function PopUpDelay()
+function PopUpDelay()
 	timer.performWithDelay(3000, PopUp)
 end
 
-local function GameStart()
+function Hide()
+	-- change the visibility of the alien
+	alien.isVisible = false
 	PopUpDelay()
 end
 
-local function Whacked(event)
+function GameStart()
+	PopUpDelay()
+end
+
+function Whacked(event)
 	-- if touch phase just started
 	if (event.phase == "began") then
 		points = points + 1

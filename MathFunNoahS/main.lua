@@ -2,7 +2,7 @@
 -- Title: MathFun
 -- Name: Noah Sabbagh
 -- Course: ICS2O
--- This prorgram dispalys a numeric text field and goes through a boolean expression
+-- This prorgram displaScreenshot 3Wys a numeric text field and goes through a boolean expression
 -- choosing addition, subtraction, multiplication or division. 
 ----------------------------------------------------------------------------------------------------
 
