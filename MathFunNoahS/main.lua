@@ -41,6 +41,7 @@ local countDownTimer
 
 -- variables for lives
 local lives = 5
+local incorrectPoints = 0
 local heart1
 local heart2
 local heart3
@@ -128,6 +129,7 @@ end
 local function LoseLives()
 	if (userAnswer ~= correctAnswer) then
 		lives = lives - 1
+		incorrectPoints = incorrectPoints + 1
 		if (lives == 4) then
 			heart4.isVisible = false
 		elseif (lives == 3) then
@@ -136,9 +138,16 @@ local function LoseLives()
 			heart2.isVisible = false
 		elseif (lives == 1) then
 			heart1.isVisible = false
-		elseif (lives == 0) then
-			timer.cancel(countDownTimer)
 		end
+	end
+end
+
+
+local function CancelTimer()
+	if (incorrectPoints == 3) then
+		timer.cancel(countDownTimer)
+		numericField.isVisible = false
+		questionObject.isVisible = false
 	end
 end
 
@@ -259,3 +268,6 @@ numericField:addEventListener( "userInput", NumericFieldListener)
 
 -- call the function to start the timer
 StartTimer()
+
+-- call the function to cancel the timer
+CancelTimer()
