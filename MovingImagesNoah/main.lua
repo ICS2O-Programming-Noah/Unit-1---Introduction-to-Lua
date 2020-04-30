@@ -1,4 +1,4 @@
-1-----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 -- Title: MovingObjects
 -- Name: Noah Sabbagh
 -- Course: ICS2O/3C
@@ -76,7 +76,7 @@ rocketship.y = display.contentHeight * 2/3
 -- Input: this function accepts an event listener
 -- Outout: none
 -- Description: This function adds the scroll speed tot he x-value of the ship
-local function MoveShip (event)
+local function MoveSpaceship (event)
 	-- add the scroll speed to the x-value of the ship
 	rocketship.x = rocketship.x + scrollSpeedRocketship
 	-- change the transparency of the ship so it moves and then fades out
@@ -96,4 +96,4 @@ backgroundMusicChannel = audio.play(backgroundMusic)
 Runtime:addEventListener("enterFrame", MoveBeetleship)
 
 -- MoveShip will be called over and over again
-Runtime:addEventListener("enterFrame", MoveShip)
+Runtime:addEventListener("enterFrame", MoveSpaceship)

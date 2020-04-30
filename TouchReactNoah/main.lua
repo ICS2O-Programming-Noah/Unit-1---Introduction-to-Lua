@@ -87,7 +87,7 @@ local function RedButtonListener(touch)
 		blueButton.isVisible = true
 		redButton.isVisible = false
 		textObject.isVisible = true
-		checkmark.isVisible = true
+		checkmark.isVisible = false
 	end
 end
 
